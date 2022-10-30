@@ -1,38 +1,18 @@
 export const helpHttp = () => {
-  const customFetch = async (endpoint, options) => {
+  const customFetch = (endpoint, options) => {
     const defaultHeaders = {
-      accept: "application//json",
+      accept: "application/json",
     };
 
     const controller = new AbortController();
     options.signal = controller.signal;
-
     options.method = options.method || "GET";
-
     options.headers = options.headers
       ? { ...defaultHeaders, ...options.headers }
       : defaultHeaders;
-
     options.body = JSON.stringify(options.body) || false;
     if (!options.body) delete options.body;
-
-    // console.log(options);
-    setTimeout(() => controller.abort(), 3000);
-
-    // try {
-    //   const res = await fetch(endpoint, options);
-    //   if (res.ok) {
-    //     return res.json();
-    //   } else {
-    //     throw Promise.reject({
-    //       error: true,
-    //       status: res.status || "00",
-    //       statusText: res.statusText || "Ocurrio un problema",
-    //     });
-    //   }
-    // } catch (error) {
-    //   return error;
-    // }
+    setTimeout(() => controller.abort(), 30000);
 
     return fetch(endpoint, options)
       .then((res) =>
@@ -45,18 +25,6 @@ export const helpHttp = () => {
             })
       )
       .catch((err) => err);
-
-    // return fetch(endpoint, options)
-    //   .then((res) => {
-    //     res.ok
-    //       ? res.json()
-    //       : Promise.reject({
-    //           err: true,
-    //           status: res.status || "00",
-    //           statusText: res.statusText || "Ocurrió un error",
-    //         });
-    //   })
-    //   .catch((error) => error);
   };
 
   const get = (url, options = {}) => customFetch(url, options);
